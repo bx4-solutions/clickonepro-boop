@@ -64,7 +64,7 @@ interface SEOProps {
   }>;
 }
 
-const BASE_URL = "https://clickonepro.com";
+const BASE_URL = "https://sidingdepot.com";
 const SUPPORTED_LANGUAGES = ["pt-BR", "en-US", "es"];
 
 const SEO = ({
@@ -72,7 +72,7 @@ const SEO = ({
   descriptionKey,
   title: directTitle,
   description: directDescription,
-  ogImage = "https://clickonepro.com/og-image.png",
+  ogImage = "https://sidingdepot.com/og-image.png",
   ogType = "website",
   noIndex = false,
   canonicalUrl,
@@ -108,8 +108,8 @@ const SEO = ({
     const baseOrganization = {
       "@type": "Organization",
       "name": "ClickOne AI",
-      "url": "https://clickonepro.com",
-      "logo": "https://clickonepro.com/favicon.png",
+      "url": "https://sidingdepot.com",
+      "logo": "https://sidingdepot.com/favicon.png",
       "sameAs": [
         "https://www.linkedin.com/company/clickone-ai",
         "https://twitter.com/clickoneai"
@@ -201,7 +201,7 @@ const SEO = ({
           "provider": {
             "@type": "Organization",
             "name": data?.provider || "ClickOne AI",
-            "url": "https://clickonepro.com"
+            "url": "https://sidingdepot.com"
           },
           "areaServed": data?.areaServed || "Worldwide",
           "serviceType": "AI Virtual Receptionist"
@@ -225,7 +225,7 @@ const SEO = ({
             "name": "ClickOne AI",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://clickonepro.com/favicon.png"
+              "url": "https://sidingdepot.com/favicon.png"
             }
           },
           "mainEntityOfPage": {
