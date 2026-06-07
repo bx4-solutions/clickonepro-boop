@@ -1,17 +1,16 @@
 // ============================================
-// External URLs - SidingDepot
+// External URLs - Centralized Constants
 // ============================================
+// This file centralizes all external URLs used across the site
+// to ensure consistency and easy maintenance.
 
 export const EXTERNAL_URLS = {
-  // SidingDepot main site
-  SITE: "https://sidingdepot.com",
-
-  // Quote / Contact
-  GHL_BOOKING: "https://sidingdepot.com/contact",
-
-  // Dashboard login
-  APP_LOGIN: "https://sidingdepot-dashboard.vercel.app/admin",
-
+  // GoHighLevel - Demo Booking
+  GHL_BOOKING: "https://links.clickonepro.com/widget/bookings/clickoneus",
+  
+  // App Login
+  APP_LOGIN: "https://app.clickonepro.com/",
+  
   // Chat Widget
   CHAT_WIDGET_SCRIPT: "https://beta.leadconnectorhq.com/loader.js",
   CHAT_WIDGET_RESOURCES: "https://beta.leadconnectorhq.com/chat-widget/loader.js",
@@ -20,10 +19,10 @@ export const EXTERNAL_URLS = {
 
 // Contact Information
 export const CONTACT_INFO = {
-  EMAIL: "info@sidingdepot.com",
+  EMAIL: "info@clickonepro.com",
   PHONE: "+1 (770) 501-7321",
   PHONE_HREF: "tel:+17705017321",
-  LOCATION: "Marietta, Georgia",
+  LOCATION: "United States",
 } as const;
 
 // UTM Parameter Helper
