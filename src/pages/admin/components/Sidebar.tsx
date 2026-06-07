@@ -12,6 +12,7 @@ import {
   PenSquare,
   Target,
   FlaskConical,
+  Settings,
 } from "lucide-react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import logoWhite from "@/assets/clickone-logo-white.png";
@@ -78,7 +79,19 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
         </div>
       </nav>
 
-      <div className="p-4 border-t border-primary-foreground/20">
+      <div className="p-4 border-t border-primary-foreground/20 space-y-1">
+        <Link
+          to="/admin/settings"
+          className={cn(
+            "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+            location.pathname === "/admin/settings"
+              ? "bg-primary-foreground/20 text-primary-foreground"
+              : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+          )}
+        >
+          <Settings className="h-5 w-5" />
+          Chaves de API
+        </Link>
         <button
           onClick={signOut}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-primary-foreground/80 hover:bg-destructive/20 hover:text-destructive-foreground transition-colors"

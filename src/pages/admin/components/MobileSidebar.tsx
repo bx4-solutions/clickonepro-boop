@@ -14,6 +14,7 @@ import {
   X,
   Target,
   FlaskConical,
+  Settings,
 } from "lucide-react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import logoWhite from "@/assets/clickone-logo-white.png";
@@ -101,7 +102,20 @@ const MobileSidebar = ({ activeTab, onTabChange }: MobileSidebarProps) => {
           </div>
         </nav>
 
-        <div className="p-4 border-t border-primary-foreground/20">
+        <div className="p-4 border-t border-primary-foreground/20 space-y-1">
+          <Link
+            to="/admin/settings"
+            onClick={() => setOpen(false)}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+              location.pathname === "/admin/settings"
+                ? "bg-primary-foreground/20 text-primary-foreground"
+                : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            )}
+          >
+            <Settings className="h-5 w-5" />
+            Chaves de API
+          </Link>
           <button
             onClick={() => {
               signOut();

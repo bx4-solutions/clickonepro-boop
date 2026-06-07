@@ -33,6 +33,7 @@ const LPEditor = lazy(() => import("./pages/admin/LPEditor"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 const BlogManager = lazy(() => import("./pages/admin/BlogManager"));
 const BlogEditor = lazy(() => import("./pages/admin/BlogEditor"));
+const Settings = lazy(() => import("./pages/admin/Settings"));
 const Login = lazy(() => import("./pages/admin/Login"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
@@ -81,6 +82,7 @@ const App = () => (
                 <Route path="/admin/blog" element={<BlogManager />} />
                 <Route path="/admin/blog/new" element={<BlogEditor />} />
                 <Route path="/admin/blog/edit/:id" element={<BlogEditor />} />
+                <Route path="/admin/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

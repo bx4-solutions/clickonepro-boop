@@ -145,8 +145,21 @@ const BlogEditorContent = () => {
     setIsGenerating(true);
     setShowAIModal(false);
     try {
+      // Load API key from dashboard_settings
+      const keyMap: Record<string, string> = {
+        anthropic: "anthropic_api_key",
+        openai: "openai_api_key",
+        gemini: "gemini_api_key",
+      };
+      const { data: settingRow } = await supabase
+        .from("dashboard_settings")
+        .select("value")
+        .eq("key", keyMap[aiProvider])
+        .maybeSingle();
+      const apiKey = settingRow?.value ?? "";
+
       const { data, error } = await supabase.functions.invoke("generate-blog-article", {
-        body: { title: aiTopic, keywords: aiKeywords, provider: aiProvider },
+        body: { title: aiTopic, keywords: aiKeywords, provider: aiProvider, apiKey },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
