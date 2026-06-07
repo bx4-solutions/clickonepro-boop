@@ -63,9 +63,9 @@ const MobileSidebar = ({ activeTab, onTabChange }: MobileSidebarProps) => {
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0 bg-primary border-none">
         <SheetHeader className="p-6 border-b border-primary-foreground/20">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={logoWhite} alt="ClickOne" className="h-8" />
-          </Link>
+          <a href="https://sidingdepot.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+            <img src={logoWhite} alt="SidingDepot" className="h-8" />
+          </a>
         </SheetHeader>
 
         <nav className="flex-1 p-4 space-y-1">
