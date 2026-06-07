@@ -56,6 +56,7 @@ const BlogEditorContent = () => {
   const [showAIModal, setShowAIModal] = useState(false);
   const [aiTopic, setAiTopic] = useState("");
   const [aiKeywords, setAiKeywords] = useState("");
+  const [aiProvider, setAiProvider] = useState<"anthropic" | "openai" | "gemini">("anthropic");
 
   const { data: posts } = useAllPosts();
   const createPost = useCreatePost();
@@ -145,7 +146,7 @@ const BlogEditorContent = () => {
     setShowAIModal(false);
     try {
       const { data, error } = await supabase.functions.invoke("generate-blog-article", {
-        body: { title: aiTopic, keywords: aiKeywords },
+        body: { title: aiTopic, keywords: aiKeywords, provider: aiProvider },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -396,6 +397,32 @@ const BlogEditorContent = () => {
             </div>
 
             <div className="space-y-4">
+              {/* Provider selector */}
+              <div>
+                <label className="block text-sm font-medium text-zinc-300 mb-2">IA utilizada</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {([
+                    { id: "anthropic", label: "Claude", sub: "Anthropic", emoji: "🟣" },
+                    { id: "openai",    label: "GPT-4o", sub: "OpenAI",    emoji: "🟢" },
+                    { id: "gemini",    label: "Gemini",  sub: "Google",   emoji: "🔵" },
+                  ] as const).map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => setAiProvider(p.id)}
+                      className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border text-sm font-medium transition-all ${
+                        aiProvider === p.id
+                          ? "border-purple-500 bg-purple-500/20 text-white"
+                          : "border-zinc-700 text-zinc-400 hover:border-zinc-500"
+                      }`}
+                    >
+                      <span className="text-xl">{p.emoji}</span>
+                      <span>{p.label}</span>
+                      <span className="text-xs text-zinc-500">{p.sub}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-1">
                   Tema / Título do Artigo <span className="text-purple-400">*</span>
@@ -420,8 +447,8 @@ const BlogEditorContent = () => {
                   onChange={(e) => setAiKeywords(e.target.value)}
                 />
               </div>
-              <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4 text-sm text-zinc-400">
-                💡 O Claude vai gerar automaticamente: título, slug, conteúdo completo (1.200–1.800 palavras), excerpt, meta title e meta description — tudo otimizado para o nicho SidingDepot.
+              <div className="bg-zinc-800/60 border border-zinc-700 rounded-lg p-3 text-xs text-zinc-400">
+                💡 A IA vai gerar: título, slug, conteúdo (1.200–1.800 palavras com tabelas e FAQ), excerpt e meta SEO — tudo otimizado para o nicho SidingDepot.
               </div>
             </div>
 
