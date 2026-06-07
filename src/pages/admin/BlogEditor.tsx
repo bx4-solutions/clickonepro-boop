@@ -193,7 +193,7 @@ const BlogEditorContent = () => {
       }
       setAiTopic("");
       setAiKeywords("");
-      toast({ title: "✅ Artigo gerado com sucesso!", description: `${data.provider?.toUpperCase()} · ${data.readTime || 7} min leitura · 4 imagens incluídas` });
+      toast({ title: "✅ Artigo gerado com sucesso!", description: `${data.provider?.toUpperCase()} · ${data.wordCount || '~1000'} palavras · ${data.readTime || 5} min · 4 imagens` });
     } catch (err: any) {
       toast({ title: "Erro ao gerar artigo", description: err.message, variant: "destructive" });
     } finally {
