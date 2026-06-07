@@ -56,7 +56,9 @@ const BlogEditorContent = () => {
   const [showAIModal, setShowAIModal] = useState(false);
   const [aiTopic, setAiTopic] = useState("");
   const [aiKeywords, setAiKeywords] = useState("");
-  const [aiProvider, setAiProvider] = useState<"anthropic" | "openai" | "gemini">("anthropic");
+  const [aiProvider, setAiProvider] = useState<"anthropic" | "openai" | "gemini">("gemini");
+  const [schemaJson, setSchemaJson] = useState("");
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
 
   const { data: posts } = useAllPosts();
   const createPost = useCreatePost();
@@ -116,6 +118,7 @@ const BlogEditorContent = () => {
         read_time: calculateReadTime(content),
         meta_title: metaTitle || null,
         meta_description: metaDescription || null,
+        schema_json: schemaJson || null,
       };
 
       if (isEditing) {
@@ -158,21 +161,39 @@ const BlogEditorContent = () => {
         .maybeSingle();
       const apiKey = settingRow?.value ?? "";
 
+      // Load Pexels key too (optional — for better images)
+      const { data: pexelsRow } = await supabase
+        .from("dashboard_settings")
+        .select("value")
+        .eq("key", "pexels_api_key")
+        .maybeSingle();
+      const pexelsKey = pexelsRow?.value ?? "";
+
       const { data, error } = await supabase.functions.invoke("generate-blog-article", {
-        body: { title: aiTopic, keywords: aiKeywords, provider: aiProvider, apiKey },
+        body: { title: aiTopic, keywords: aiKeywords, provider: aiProvider, apiKey, pexelsKey },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
+      // Fill all fields from rich response
       setTitle(data.title || aiTopic);
       setSlug(data.slug || generateSlug(aiTopic));
       setContent(data.content || "");
       setExcerpt(data.excerpt || "");
       setMetaTitle(data.metaTitle || "");
       setMetaDescription(data.metaDescription || "");
+      if (data.coverImage) setCoverImage(data.coverImage);
+      if (data.schemaJson) setSchemaJson(data.schemaJson);
+      if (data.images) {
+        setGeneratedImages([
+          data.images.section1,
+          data.images.section2,
+          data.images.section3,
+        ].filter(Boolean));
+      }
       setAiTopic("");
       setAiKeywords("");
-      toast({ title: "✅ Artigo gerado com sucesso!", description: "Revise e publique quando estiver pronto." });
+      toast({ title: "✅ Artigo gerado com sucesso!", description: `${data.provider?.toUpperCase()} · ${data.readTime || 7} min leitura · 4 imagens incluídas` });
     } catch (err: any) {
       toast({ title: "Erro ao gerar artigo", description: err.message, variant: "destructive" });
     } finally {
@@ -386,6 +407,51 @@ const BlogEditorContent = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* ── Schema JSON-LD ── */}
+            {schemaJson && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <span>{"{ }"}</span> JSON-LD Schema
+                    <span className="ml-auto text-xs font-normal text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">Gerado ✓</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <pre className="text-xs bg-zinc-900 text-zinc-300 rounded-lg p-3 overflow-auto max-h-48 leading-relaxed">
+                    {schemaJson}
+                  </pre>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Cole este código no &lt;head&gt; da página para rich snippets no Google.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* ── Generated Images Preview ── */}
+            {generatedImages.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    🖼 Imagens Semânticas
+                    <span className="ml-auto text-xs font-normal text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">{generatedImages.length} incluídas ✓</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {generatedImages.map((url, i) => (
+                    <div key={i} className="rounded-lg overflow-hidden border border-zinc-800">
+                      <img
+                        src={url}
+                        alt={`Imagem semântica ${i + 1}`}
+                        className="w-full h-28 object-cover"
+                        loading="lazy"
+                      />
+                      <p className="text-xs text-zinc-500 px-2 py-1">Imagem {i + 1} — inserida no artigo</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
@@ -401,7 +467,7 @@ const BlogEditorContent = () => {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Gerar Artigo com IA</h2>
-                  <p className="text-sm text-zinc-400">Claude vai escrever um artigo SEO completo</p>
+                  <p className="text-sm text-zinc-400">H1–H3 · SEO · Schema JSON-LD · 4 imagens automáticas</p>
                 </div>
               </div>
               <button onClick={() => setShowAIModal(false)} className="text-zinc-500 hover:text-white transition-colors">

@@ -7,9 +7,10 @@ import { Loader2, Save, Eye, EyeOff, CheckCircle, AlertCircle, ArrowLeft, Key } 
 // ── Providers config ──────────────────────────────────────────────────────────
 
 const PROVIDERS = [
-  { id: "anthropic_api_key", label: "Claude",  sub: "Anthropic", emoji: "🟣", placeholder: "sk-ant-api03-...", docsUrl: "https://console.anthropic.com/settings/keys" },
-  { id: "openai_api_key",    label: "GPT-4o",  sub: "OpenAI",    emoji: "🟢", placeholder: "sk-proj-...",     docsUrl: "https://platform.openai.com/api-keys" },
-  { id: "gemini_api_key",    label: "Gemini",  sub: "Google",    emoji: "🔵", placeholder: "AIza...",          docsUrl: "https://aistudio.google.com/app/apikey" },
+  { id: "anthropic_api_key", label: "Claude",  sub: "Anthropic",      emoji: "🟣", placeholder: "sk-ant-api03-...", docsUrl: "https://console.anthropic.com/settings/keys" },
+  { id: "openai_api_key",    label: "GPT-4o",  sub: "OpenAI",         emoji: "🟢", placeholder: "sk-proj-...",     docsUrl: "https://platform.openai.com/api-keys" },
+  { id: "gemini_api_key",    label: "Gemini",  sub: "Google",         emoji: "🔵", placeholder: "AIza...",          docsUrl: "https://aistudio.google.com/app/apikey" },
+  { id: "pexels_api_key",    label: "Pexels",  sub: "Imagens (free)", emoji: "🖼️", placeholder: "pexels-...",      docsUrl: "https://www.pexels.com/api/" },
 ] as const;
 
 type ProviderId = typeof PROVIDERS[number]["id"];
@@ -20,7 +21,7 @@ function SettingsContent() {
   const { user, isAdmin, isLoading: authLoading } = useAdminAuth();
   const navigate = useNavigate();
 
-  const [keys,    setKeys]    = useState<Record<ProviderId, string>>({ anthropic_api_key: "", openai_api_key: "", gemini_api_key: "" });
+  const [keys,    setKeys]    = useState<Record<ProviderId, string>>({ anthropic_api_key: "", openai_api_key: "", gemini_api_key: "", pexels_api_key: "" });
   const [visible, setVisible] = useState<Record<string, boolean>>({});
   const [saving,  setSaving]  = useState<Record<string, boolean>>({});
   const [saved,   setSaved]   = useState<Record<string, boolean>>({});
@@ -171,7 +172,8 @@ function SettingsContent() {
         <div className="mt-8 bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 text-xs text-zinc-400 space-y-2">
           <p className="font-medium text-zinc-300">🔒 Segurança</p>
           <p>As chaves ficam no Supabase com acesso restrito a usuários autenticados. São enviadas via HTTPS para a Edge Function somente no momento da geração do artigo.</p>
-          <p>Configure pelo menos <strong className="text-zinc-300">uma</strong> chave para o gerador funcionar. O Gemini tem plano gratuito generoso.</p>
+          <p>Configure pelo menos <strong className="text-zinc-300">uma chave de IA</strong> para o gerador funcionar. O Gemini tem plano gratuito generoso.</p>
+          <p className="mt-1">A chave <strong className="text-zinc-300">Pexels</strong> é opcional — melhora a qualidade das imagens geradas automaticamente. Gratuita em <a href="https://www.pexels.com/api/" target="_blank" rel="noopener noreferrer" className="text-purple-400 underline">pexels.com/api</a>.</p>
         </div>
       </div>
     </div>
