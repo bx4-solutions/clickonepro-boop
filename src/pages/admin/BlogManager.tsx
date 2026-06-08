@@ -159,11 +159,11 @@ const BlogManagerContent = () => {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Link to={`/blog/${post.slug}`} target="_blank">
+                        <a href={`https://sidingdepot-7od3lluaq-bionicaosilva-2000s-projects.vercel.app/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">
                           <Button variant="ghost" size="icon">
                             <Eye className="h-4 w-4" />
                           </Button>
-                        </Link>
+                        </a>
                         <Link to={`/admin/blog/edit/${post.id}`}>
                           <Button variant="ghost" size="icon">
                             <Edit className="h-4 w-4" />
