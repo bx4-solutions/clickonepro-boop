@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_events: {
+        Row: {
+          city: string | null
+          event_type: string
+          id: string
+          landing_page: string | null
+          metadata: Json | null
+          service_key: string | null
+          timestamp: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          variation: string | null
+        }
+        Insert: {
+          city?: string | null
+          event_type: string
+          id?: string
+          landing_page?: string | null
+          metadata?: Json | null
+          service_key?: string | null
+          timestamp?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          variation?: string | null
+        }
+        Update: {
+          city?: string | null
+          event_type?: string
+          id?: string
+          landing_page?: string | null
+          metadata?: Json | null
+          service_key?: string | null
+          timestamp?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          variation?: string | null
+        }
+        Relationships: []
+      }
       alert_rules: {
         Row: {
           condition: Json
@@ -116,6 +158,33 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          table_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          table_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          table_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       blog_categories: {
         Row: {
           color: string | null
@@ -146,316 +215,257 @@ export type Database = {
       blog_posts: {
         Row: {
           author: string | null
-          category_id: string | null
+          author_id: string | null
+          category: string | null
           content: string
           cover_image: string | null
           created_at: string | null
           excerpt: string | null
           id: string
+          keywords: string[] | null
           meta_description: string | null
           meta_title: string | null
           published_at: string | null
           read_time: number | null
+          schema_json: Json | null
           slug: string
           status: string | null
+          suggested_date: string | null
           title: string
           updated_at: string | null
           views: number | null
         }
         Insert: {
           author?: string | null
-          category_id?: string | null
+          author_id?: string | null
+          category?: string | null
           content: string
           cover_image?: string | null
           created_at?: string | null
           excerpt?: string | null
           id?: string
+          keywords?: string[] | null
           meta_description?: string | null
           meta_title?: string | null
           published_at?: string | null
           read_time?: number | null
+          schema_json?: Json | null
           slug: string
           status?: string | null
+          suggested_date?: string | null
           title: string
           updated_at?: string | null
           views?: number | null
         }
         Update: {
           author?: string | null
-          category_id?: string | null
+          author_id?: string | null
+          category?: string | null
           content?: string
           cover_image?: string | null
           created_at?: string | null
           excerpt?: string | null
           id?: string
+          keywords?: string[] | null
           meta_description?: string | null
           meta_title?: string | null
           published_at?: string | null
           read_time?: number | null
+          schema_json?: Json | null
           slug?: string
           status?: string | null
+          suggested_date?: string | null
           title?: string
           updated_at?: string | null
           views?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "blog_posts_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "blog_categories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      landing_pages: {
+      daily_metrics: {
         Row: {
-          content: Json
+          bounce_rate: number | null
           created_at: string | null
+          date: string
           id: string
-          images: Json | null
-          name: string
-          slug: string
-          status: string | null
-          updated_at: string | null
+          leads: number | null
+          pageviews: number | null
+          visitors: number | null
         }
         Insert: {
-          content?: Json
+          bounce_rate?: number | null
           created_at?: string | null
+          date: string
           id?: string
-          images?: Json | null
-          name: string
-          slug: string
-          status?: string | null
-          updated_at?: string | null
+          leads?: number | null
+          pageviews?: number | null
+          visitors?: number | null
         }
         Update: {
-          content?: Json
+          bounce_rate?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          leads?: number | null
+          pageviews?: number | null
+          visitors?: number | null
+        }
+        Relationships: []
+      }
+      dashboard_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json | null
+        }
+        Insert: {
           created_at?: string | null
           id?: string
-          images?: Json | null
-          name?: string
-          slug?: string
-          status?: string | null
+          key: string
           updated_at?: string | null
+          value?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Relationships: []
+      }
+      google_place_stats: {
+        Row: {
+          calls: number | null
+          created_at: string | null
+          date: string
+          direction_requests: number | null
+          id: string
+          photo_views: number | null
+          profile_views: number | null
+          rating: number | null
+          reviews_count: number | null
+          searches: number | null
+          website_clicks: number | null
+        }
+        Insert: {
+          calls?: number | null
+          created_at?: string | null
+          date: string
+          direction_requests?: number | null
+          id?: string
+          photo_views?: number | null
+          profile_views?: number | null
+          rating?: number | null
+          reviews_count?: number | null
+          searches?: number | null
+          website_clicks?: number | null
+        }
+        Update: {
+          calls?: number | null
+          created_at?: string | null
+          date?: string
+          direction_requests?: number | null
+          id?: string
+          photo_views?: number | null
+          profile_views?: number | null
+          rating?: number | null
+          reviews_count?: number | null
+          searches?: number | null
+          website_clicks?: number | null
+        }
+        Relationships: []
+      }
+      gsc_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json | null
         }
         Relationships: []
       }
       leads: {
         Row: {
+          city: string | null
           company: string | null
+          consent: boolean | null
           created_at: string | null
+          details: string | null
           email: string
           id: string
+          message: string | null
+          metadata: Json | null
           name: string | null
+          page_url: string | null
           phone: string | null
+          services: string[] | null
           source: string | null
           status: string | null
+          tag: string | null
           utm_campaign: string | null
           utm_medium: string | null
           utm_source: string | null
         }
         Insert: {
+          city?: string | null
           company?: string | null
+          consent?: boolean | null
           created_at?: string | null
+          details?: string | null
           email: string
           id?: string
+          message?: string | null
+          metadata?: Json | null
           name?: string | null
+          page_url?: string | null
           phone?: string | null
+          services?: string[] | null
           source?: string | null
           status?: string | null
+          tag?: string | null
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
         }
         Update: {
+          city?: string | null
           company?: string | null
+          consent?: boolean | null
           created_at?: string | null
+          details?: string | null
           email?: string
           id?: string
+          message?: string | null
+          metadata?: Json | null
           name?: string | null
+          page_url?: string | null
           phone?: string | null
+          services?: string[] | null
           source?: string | null
           status?: string | null
+          tag?: string | null
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
         }
         Relationships: []
-      }
-      lp_ab_sessions: {
-        Row: {
-          converted: boolean | null
-          created_at: string | null
-          id: string
-          session_id: string
-          test_id: string
-          variant: string
-        }
-        Insert: {
-          converted?: boolean | null
-          created_at?: string | null
-          id?: string
-          session_id: string
-          test_id: string
-          variant: string
-        }
-        Update: {
-          converted?: boolean | null
-          created_at?: string | null
-          id?: string
-          session_id?: string
-          test_id?: string
-          variant?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lp_ab_sessions_test_id_fkey"
-            columns: ["test_id"]
-            isOneToOne: false
-            referencedRelation: "lp_ab_tests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lp_ab_tests: {
-        Row: {
-          confidence_level: number | null
-          created_at: string | null
-          end_date: string | null
-          goal_target: string | null
-          goal_type: string | null
-          id: string
-          landing_page_id: string
-          name: string
-          start_date: string | null
-          status: string | null
-          traffic_split: number | null
-          updated_at: string | null
-          variant_a_content: Json | null
-          variant_a_conversions: number | null
-          variant_a_views: number | null
-          variant_b_content: Json
-          variant_b_conversions: number | null
-          variant_b_views: number | null
-          winner: string | null
-        }
-        Insert: {
-          confidence_level?: number | null
-          created_at?: string | null
-          end_date?: string | null
-          goal_target?: string | null
-          goal_type?: string | null
-          id?: string
-          landing_page_id: string
-          name: string
-          start_date?: string | null
-          status?: string | null
-          traffic_split?: number | null
-          updated_at?: string | null
-          variant_a_content?: Json | null
-          variant_a_conversions?: number | null
-          variant_a_views?: number | null
-          variant_b_content: Json
-          variant_b_conversions?: number | null
-          variant_b_views?: number | null
-          winner?: string | null
-        }
-        Update: {
-          confidence_level?: number | null
-          created_at?: string | null
-          end_date?: string | null
-          goal_target?: string | null
-          goal_type?: string | null
-          id?: string
-          landing_page_id?: string
-          name?: string
-          start_date?: string | null
-          status?: string | null
-          traffic_split?: number | null
-          updated_at?: string | null
-          variant_a_content?: Json | null
-          variant_a_conversions?: number | null
-          variant_a_views?: number | null
-          variant_b_content?: Json
-          variant_b_conversions?: number | null
-          variant_b_views?: number | null
-          winner?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lp_ab_tests_landing_page_id_fkey"
-            columns: ["landing_page_id"]
-            isOneToOne: false
-            referencedRelation: "landing_pages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lp_campaigns: {
-        Row: {
-          avg_conversion_value: number | null
-          created_at: string | null
-          currency: string | null
-          end_date: string
-          goal_conversions: number | null
-          goal_pageviews: number | null
-          goal_reach: number | null
-          goal_revenue: number | null
-          goal_visitors: number | null
-          id: string
-          landing_page_id: string | null
-          name: string
-          page_path: string | null
-          start_date: string
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          avg_conversion_value?: number | null
-          created_at?: string | null
-          currency?: string | null
-          end_date: string
-          goal_conversions?: number | null
-          goal_pageviews?: number | null
-          goal_reach?: number | null
-          goal_revenue?: number | null
-          goal_visitors?: number | null
-          id?: string
-          landing_page_id?: string | null
-          name: string
-          page_path?: string | null
-          start_date: string
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avg_conversion_value?: number | null
-          created_at?: string | null
-          currency?: string | null
-          end_date?: string
-          goal_conversions?: number | null
-          goal_pageviews?: number | null
-          goal_reach?: number | null
-          goal_revenue?: number | null
-          goal_visitors?: number | null
-          id?: string
-          landing_page_id?: string | null
-          name?: string
-          page_path?: string | null
-          start_date?: string
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lp_campaigns_landing_page_id_fkey"
-            columns: ["landing_page_id"]
-            isOneToOne: false
-            referencedRelation: "landing_pages"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       notifications: {
         Row: {
@@ -487,6 +497,63 @@ export type Database = {
           severity?: string | null
           title?: string
           type?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          settings: Json | null
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          settings?: Json | null
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          settings?: Json | null
+          slug?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -565,18 +632,11 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_ab_views: {
-        Args: { p_test_id: string; p_variant: string }
-        Returns: undefined
-      }
       increment_post_views: { Args: { post_slug: string }; Returns: undefined }
-      record_ab_conversion: {
-        Args: { p_session_id: string }
-        Returns: undefined
-      }
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer"
+      user_role: "admin" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -705,6 +765,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "viewer"],
+      user_role: ["admin", "viewer"],
     },
   },
 } as const

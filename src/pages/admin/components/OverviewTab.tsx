@@ -7,6 +7,8 @@ import {
   useTimelineData,
   useDeviceStats,
   useTopPages,
+  useAvgTimeOnPage,
+  useBounceRate,
   AnalyticsFilters,
 } from "@/hooks/useAnalytics";
 import {
@@ -44,6 +46,8 @@ const OverviewTab = ({ filters }: OverviewTabProps) => {
   const { data: timelineData, isLoading: timelineLoading } = useTimelineData(filters);
   const { data: deviceData, isLoading: devicesLoading } = useDeviceStats(filters);
   const { data: topPages, isLoading: topPagesLoading } = useTopPages(filters);
+  const { data: avgTimeStats } = useAvgTimeOnPage(filters);
+  const { data: bounceStats } = useBounceRate(filters);
 
   // Generate sparkline data from timeline
   const sparklineData = timelineData?.slice(-7).map((d) => ({ value: d.visitors })) || [];
@@ -70,16 +74,16 @@ const OverviewTab = ({ filters }: OverviewTabProps) => {
         />
         <StatsCard
           title="Tempo Médio no Site"
-          value={145}
-          changePercent={8.5}
+          value={avgTimeStats?.current || 0}
+          changePercent={avgTimeStats?.changePercent}
           comparePeriod="vs período anterior"
           icon={Clock}
           format="time"
         />
         <StatsCard
           title="Taxa de Rejeição"
-          value={32.4}
-          changePercent={-5.2}
+          value={bounceStats?.current || 0}
+          changePercent={bounceStats?.changePercent}
           comparePeriod="vs período anterior"
           icon={MousePointerClick}
           format="percent"

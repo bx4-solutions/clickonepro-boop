@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTopPages, AnalyticsFilters } from "@/hooks/useAnalytics";
+import { useTopPages, usePagePerformance, AnalyticsFilters } from "@/hooks/useAnalytics";
 import {
   BarChart,
   Bar,
@@ -29,15 +29,15 @@ interface SiteTabProps {
 
 const SiteTab = ({ filters }: SiteTabProps) => {
   const { data: topPages, isLoading } = useTopPages(filters);
+  const { data: pagePerformance } = usePagePerformance(filters);
 
-  // Mock data for page performance
-  const performanceData = [
-    { page: "Home", views: 100, time: 85, scroll: 90, bounce: 70 },
-    { page: "Produtos", views: 75, time: 70, scroll: 65, bounce: 80 },
-    { page: "Blog", views: 60, time: 90, scroll: 85, bounce: 60 },
-    { page: "Contato", views: 40, time: 50, scroll: 70, bounce: 75 },
-    { page: "Demo", views: 80, time: 95, scroll: 95, bounce: 50 },
-  ];
+  const radarData = pagePerformance && pagePerformance.length > 0
+    ? pagePerformance.slice(0, 5).map((p) => ({
+        page: p.path.replace("/", "") || "Home",
+        views: p.views,
+        scroll: p.avgScroll || 0,
+      }))
+    : [];
 
   return (
     <div className="space-y-6">
@@ -57,7 +57,7 @@ const SiteTab = ({ filters }: SiteTabProps) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(topPages || []).map((page) => (
+              {(pagePerformance || []).map((page) => (
                 <TableRow key={page.path}>
                   <TableCell className="font-medium">
                     <div>
@@ -66,8 +66,12 @@ const SiteTab = ({ filters }: SiteTabProps) => {
                     </div>
                   </TableCell>
                   <TableCell className="text-right">{page.views.toLocaleString()}</TableCell>
-                  <TableCell className="text-right">2m 30s</TableCell>
-                  <TableCell className="text-right">75%</TableCell>
+                  <TableCell className="text-right">
+                    {page.avgTime != null ? `${Math.floor(page.avgTime / 60)}m ${page.avgTime % 60}s` : "—"}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {page.avgScroll != null ? `${page.avgScroll}%` : "—"}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -111,7 +115,7 @@ const SiteTab = ({ filters }: SiteTabProps) => {
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={performanceData}>
+                <RadarChart data={radarData}>
                   <PolarGrid className="stroke-border" />
                   <PolarAngleAxis dataKey="page" className="text-muted-foreground" />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} />

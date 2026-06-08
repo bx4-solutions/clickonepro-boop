@@ -311,3 +311,197 @@ export const useUSStateStats = (filters: AnalyticsFilters) => {
     },
   });
 };
+
+export const useAvgTimeOnPage = (filters: AnalyticsFilters) => {
+  return useQuery({
+    queryKey: ["analytics", "avgTimeOnPage", filters],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("analytics_events")
+        .select("time_on_page")
+        .eq("event_type", "page_exit")
+        .not("time_on_page", "is", null)
+        .gte("created_at", filters.startDate.toISOString())
+        .lte("created_at", filters.endDate.toISOString());
+
+      if (error) throw error;
+
+      const periodLength = filters.endDate.getTime() - filters.startDate.getTime();
+      const previousStart = new Date(filters.startDate.getTime() - periodLength);
+      const previousEnd = new Date(filters.endDate.getTime() - periodLength);
+
+      const { data: prevData } = await supabase
+        .from("analytics_events")
+        .select("time_on_page")
+        .eq("event_type", "page_exit")
+        .not("time_on_page", "is", null)
+        .gte("created_at", previousStart.toISOString())
+        .lte("created_at", previousEnd.toISOString());
+
+      const times = (data || []).map((e) => e.time_on_page as number);
+      const prevTimes = (prevData || []).map((e) => e.time_on_page as number);
+
+      const current = times.length > 0 ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : 0;
+      const previous = prevTimes.length > 0 ? Math.round(prevTimes.reduce((a, b) => a + b, 0) / prevTimes.length) : 0;
+      const change = current - previous;
+      const changePercent = previous > 0 ? (change / previous) * 100 : 0;
+
+      return { current, previous, change, changePercent } as StatsData;
+    },
+  });
+};
+
+export const useBounceRate = (filters: AnalyticsFilters) => {
+  return useQuery({
+    queryKey: ["analytics", "bounceRate", filters],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("analytics_events")
+        .select("session_id")
+        .eq("event_type", "pageview")
+        .gte("created_at", filters.startDate.toISOString())
+        .lte("created_at", filters.endDate.toISOString());
+
+      if (error) throw error;
+
+      const periodLength = filters.endDate.getTime() - filters.startDate.getTime();
+      const previousStart = new Date(filters.startDate.getTime() - periodLength);
+      const previousEnd = new Date(filters.endDate.getTime() - periodLength);
+
+      const { data: prevData } = await supabase
+        .from("analytics_events")
+        .select("session_id")
+        .eq("event_type", "pageview")
+        .gte("created_at", previousStart.toISOString())
+        .lte("created_at", previousEnd.toISOString());
+
+      const calcBounce = (events: { session_id: string }[]) => {
+        const sessionCounts = (events || []).reduce((acc, e) => {
+          acc[e.session_id] = (acc[e.session_id] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        const total = Object.keys(sessionCounts).length;
+        const bounced = Object.values(sessionCounts).filter((c) => c === 1).length;
+        return total > 0 ? (bounced / total) * 100 : 0;
+      };
+
+      const current = parseFloat(calcBounce(data || []).toFixed(1));
+      const previous = parseFloat(calcBounce(prevData || []).toFixed(1));
+      const change = current - previous;
+      const changePercent = previous > 0 ? (change / previous) * 100 : 0;
+
+      return { current, previous, change, changePercent } as StatsData;
+    },
+  });
+};
+
+export const useAcquisitionStats = (filters: AnalyticsFilters) => {
+  return useQuery({
+    queryKey: ["analytics", "acquisition", filters],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("analytics_events")
+        .select("session_id, utm_source, utm_medium, utm_campaign, referrer")
+        .eq("event_type", "pageview")
+        .gte("created_at", filters.startDate.toISOString())
+        .lte("created_at", filters.endDate.toISOString())
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+
+      // First touch per session
+      const seen = new Set<string>();
+      const firstTouch: typeof data = [];
+      for (const e of data || []) {
+        if (!seen.has(e.session_id)) {
+          seen.add(e.session_id);
+          firstTouch.push(e);
+        }
+      }
+
+      const sourceMap: Record<string, number> = {};
+      const utmMap: Record<string, { source: string; medium: string; visitors: number }> = {};
+
+      for (const e of firstTouch) {
+        let source = "Direto";
+        if (e.utm_source) {
+          const s = e.utm_source.toLowerCase();
+          if (s.includes("google") || s.includes("bing") || s.includes("yahoo")) source = "Busca Orgânica";
+          else if (s.includes("facebook") || s.includes("instagram") || s.includes("twitter") || s.includes("linkedin")) source = "Social";
+          else source = e.utm_source;
+        } else if (e.referrer) {
+          const r = e.referrer.toLowerCase();
+          if (r.includes("google") || r.includes("bing") || r.includes("yahoo")) source = "Busca Orgânica";
+          else if (r.includes("facebook") || r.includes("instagram") || r.includes("twitter") || r.includes("linkedin")) source = "Social";
+          else if (r !== "") source = "Referência";
+        }
+
+        sourceMap[source] = (sourceMap[source] || 0) + 1;
+
+        if (e.utm_campaign) {
+          const key = `${e.utm_source}|${e.utm_medium}|${e.utm_campaign}`;
+          if (!utmMap[key]) {
+            utmMap[key] = { source: e.utm_source || "", medium: e.utm_medium || "", visitors: 0 };
+          }
+          utmMap[key].visitors++;
+        }
+      }
+
+      const sources = Object.entries(sourceMap)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value);
+
+      const utmCampaigns = Object.entries(utmMap).map(([key, val]) => ({
+        campaign: key.split("|")[2],
+        source: val.source,
+        medium: val.medium,
+        visitors: val.visitors,
+      })).sort((a, b) => b.visitors - a.visitors);
+
+      return { sources, utmCampaigns };
+    },
+  });
+};
+
+export const usePagePerformance = (filters: AnalyticsFilters) => {
+  return useQuery({
+    queryKey: ["analytics", "pagePerformance", filters],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("analytics_events")
+        .select("page_path, page_title, event_type, time_on_page, scroll_depth")
+        .in("event_type", ["pageview", "page_exit"])
+        .gte("created_at", filters.startDate.toISOString())
+        .lte("created_at", filters.endDate.toISOString());
+
+      if (error) throw error;
+
+      const pageMap: Record<string, { title: string; views: number; times: number[]; scrolls: number[] }> = {};
+
+      for (const e of data || []) {
+        if (!pageMap[e.page_path]) {
+          pageMap[e.page_path] = { title: e.page_title || e.page_path, views: 0, times: [], scrolls: [] };
+        }
+        if (e.event_type === "pageview") {
+          pageMap[e.page_path].views++;
+          if (e.page_title) pageMap[e.page_path].title = e.page_title;
+        }
+        if (e.event_type === "page_exit") {
+          if (e.time_on_page != null) pageMap[e.page_path].times.push(e.time_on_page);
+          if (e.scroll_depth != null) pageMap[e.page_path].scrolls.push(e.scroll_depth);
+        }
+      }
+
+      return Object.entries(pageMap)
+        .map(([path, d]) => ({
+          path,
+          title: d.title,
+          views: d.views,
+          avgTime: d.times.length > 0 ? Math.round(d.times.reduce((a, b) => a + b, 0) / d.times.length) : null,
+          avgScroll: d.scrolls.length > 0 ? Math.round(d.scrolls.reduce((a, b) => a + b, 0) / d.scrolls.length) : null,
+        }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 20);
+    },
+  });
+};

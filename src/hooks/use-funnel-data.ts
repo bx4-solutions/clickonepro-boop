@@ -55,11 +55,10 @@ export const useFunnelData = (filters: AnalyticsFilters) => {
 
       const leads = leadsCount || 0;
 
-      // Get agendamentos (source = demo or agendamento)
+      // Get agendamentos = todos os leads (no Siding Depot toda cotação é um agendamento)
       const { count: agendamentosCount } = await supabase
         .from("leads")
         .select("*", { count: "exact", head: true })
-        .in("source", ["demo", "agendamento"])
         .gte("created_at", filters.startDate.toISOString())
         .lte("created_at", filters.endDate.toISOString());
 

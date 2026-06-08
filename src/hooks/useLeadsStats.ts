@@ -147,7 +147,6 @@ export const useAgendamentosCount = (filters: AnalyticsFilters) => {
       const { count } = await supabase
         .from("leads")
         .select("*", { count: "exact", head: true })
-        .in("source", ["demo", "agendamento"])
         .gte("created_at", filters.startDate.toISOString())
         .lte("created_at", filters.endDate.toISOString());
 

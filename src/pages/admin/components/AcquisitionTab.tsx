@@ -21,7 +21,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { AnalyticsFilters } from "@/hooks/useAnalytics";
+import { AnalyticsFilters, useAcquisitionStats } from "@/hooks/useAnalytics";
 
 interface AcquisitionTabProps {
   filters: AnalyticsFilters;
@@ -35,60 +35,38 @@ const COLORS = [
   "hsl(var(--chart-5))",
 ];
 
-// Mock data
-const trafficSourcesData = [
-  { name: "Direto", value: 4500 },
-  { name: "Busca Orgânica", value: 3200 },
-  { name: "Social", value: 2100 },
-  { name: "Referência", value: 1500 },
-  { name: "E-mail", value: 800 },
-];
-
-const trafficTrendData = [
-  { date: "1 Jan", direct: 150, organic: 120, social: 80 },
-  { date: "2 Jan", direct: 180, organic: 130, social: 90 },
-  { date: "3 Jan", direct: 200, organic: 150, social: 100 },
-  { date: "4 Jan", direct: 170, organic: 140, social: 85 },
-  { date: "5 Jan", direct: 220, organic: 160, social: 110 },
-  { date: "6 Jan", direct: 250, organic: 180, social: 120 },
-  { date: "7 Jan", direct: 230, organic: 170, social: 115 },
-];
-
-const utmCampaigns = [
-  { source: "google", medium: "cpc", campaign: "brand_2024", visitors: 1234, conversions: 45 },
-  { source: "facebook", medium: "paid", campaign: "retargeting", visitors: 890, conversions: 32 },
-  { source: "linkedin", medium: "social", campaign: "b2b_awareness", visitors: 567, conversions: 18 },
-  { source: "newsletter", medium: "email", campaign: "jan_promo", visitors: 432, conversions: 28 },
-  { source: "partner", medium: "referral", campaign: "affiliate_q1", visitors: 321, conversions: 15 },
-];
-
 const AcquisitionTab = ({ filters }: AcquisitionTabProps) => {
+  const { data: acquisitionData } = useAcquisitionStats(filters);
+
+  const trafficSourcesData = acquisitionData?.sources || [];
+  const utmCampaigns = acquisitionData?.utmCampaigns || [];
+  const trafficTrendData: never[] = [];
+
+  const getSourceValue = (name: string) =>
+    trafficSourcesData.find((s) => s.name === name)?.value || 0;
+
   return (
     <div className="space-y-6 overflow-hidden">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
         <StatsCard
           title="Direto"
-          value={4500}
-          changePercent={15.2}
+          value={getSourceValue("Direto")}
           icon={Link}
         />
         <StatsCard
           title="Busca Orgânica"
-          value={3200}
-          changePercent={22.8}
+          value={getSourceValue("Busca Orgânica")}
           icon={Search}
         />
         <StatsCard
           title="Social"
-          value={2100}
-          changePercent={-5.3}
+          value={getSourceValue("Social")}
           icon={Share2}
         />
         <StatsCard
-          title="E-mail"
-          value={800}
-          changePercent={18.9}
+          title="Referência"
+          value={getSourceValue("Referência")}
           icon={Mail}
         />
       </div>
@@ -206,23 +184,25 @@ const AcquisitionTab = ({ filters }: AcquisitionTabProps) => {
                 <TableHead>Meio</TableHead>
                 <TableHead>Campanha</TableHead>
                 <TableHead className="text-right">Visitantes</TableHead>
-                <TableHead className="text-right">Conversões</TableHead>
-                <TableHead className="text-right">Taxa de Conv.</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {utmCampaigns.map((campaign, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{campaign.source}</TableCell>
-                  <TableCell>{campaign.medium}</TableCell>
-                  <TableCell>{campaign.campaign}</TableCell>
-                  <TableCell className="text-right">{campaign.visitors.toLocaleString()}</TableCell>
-                  <TableCell className="text-right">{campaign.conversions}</TableCell>
-                  <TableCell className="text-right">
-                    {((campaign.conversions / campaign.visitors) * 100).toFixed(1)}%
+              {utmCampaigns.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-muted-foreground py-6">
+                    Nenhuma campanha UTM registrada ainda.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                utmCampaigns.map((campaign, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{campaign.source}</TableCell>
+                    <TableCell>{campaign.medium}</TableCell>
+                    <TableCell>{campaign.campaign}</TableCell>
+                    <TableCell className="text-right">{campaign.visitors.toLocaleString()}</TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
