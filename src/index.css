@@ -48,14 +48,14 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Sidebar verde escuro SD (#3C4A07) */
-    --sidebar-background: 73 83% 16%;
+    /* Sidebar sd-navy — igual ao hero escuro do site SD */
+    --sidebar-background: 225 28% 17%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 73 84% 48%;
-    --sidebar-primary-foreground: 73 83% 12%;
-    --sidebar-accent: 73 60% 22%;
+    --sidebar-primary-foreground: 225 28% 12%;
+    --sidebar-accent: 225 25% 24%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 73 50% 22%;
+    --sidebar-border: 225 20% 26%;
     --sidebar-ring: 73 84% 48%;
 
     /* Chart colors - SD palette */
