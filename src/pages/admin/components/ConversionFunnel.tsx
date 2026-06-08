@@ -38,11 +38,11 @@ export interface FunnelRef {
 }
 
 const FUNNEL_STAGES = [
-  { key: "visitors", label: "Prospecção", icon: Binoculars, color: "#500daa" },
-  { key: "pageviews", label: "Alcance", icon: Lightbulb, color: "#6b2fb8" },
-  { key: "leads", label: "Descoberta e Qualificação", icon: MessageCircle, color: "#8651c6" },
-  { key: "agendamentos", label: "Demonstração", icon: MousePointer, color: "#a173d4" },
-  { key: "clientes", label: "Fechamento", icon: Trophy, color: "#bc95e2" },
+  { key: "visitors", label: "Prospecção", icon: Binoculars, color: "#3C4A07" },
+  { key: "pageviews", label: "Alcance", icon: Lightbulb, color: "#5a6f0a" },
+  { key: "leads", label: "Descoberta e Qualificação", icon: MessageCircle, color: "#81A00E" },
+  { key: "agendamentos", label: "Demonstração", icon: MousePointer, color: "#A4CC12" },
+  { key: "clientes", label: "Fechamento", icon: Trophy, color: "#B6E214" },
 ];
 
 // Etapas que têm valor monetário (a partir do lead)
@@ -316,13 +316,13 @@ const ConversionFunnel = forwardRef<FunnelRef, ConversionFunnelProps>(({ filters
           <div className="grid grid-cols-2 gap-2 md:gap-4 text-center">
             <div>
               <p className="text-[10px] md:text-xs text-muted-foreground">Prospecto → Qualificado</p>
-              <p className="text-base md:text-lg font-bold" style={{ color: "#500daa" }}>
+              <p className="text-base md:text-lg font-bold" style={{ color: "#3C4A07" }}>
                 {data.visitors > 0 ? ((data.leads / data.visitors) * 100).toFixed(1) : 0}%
               </p>
             </div>
             <div>
               <p className="text-[10px] md:text-xs text-muted-foreground">Demo → Fechado</p>
-              <p className="text-base md:text-lg font-bold" style={{ color: "#a173d4" }}>
+              <p className="text-base md:text-lg font-bold" style={{ color: "#A4CC12" }}>
                 {data.leads > 0 ? ((data.clientes / data.leads) * 100).toFixed(1) : 0}%
               </p>
             </div>

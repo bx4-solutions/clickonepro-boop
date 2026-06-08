@@ -347,32 +347,54 @@ const DashboardTab = ({ filters, onRefresh, onRefreshStart }: DashboardTabProps)
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={timelineData || []}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="date" className="text-xs" />
-                <YAxis className="text-xs" />
+                <defs>
+                  <linearGradient id="gradPageviews" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#B6E214" stopOpacity={0.45} />
+                    <stop offset="95%" stopColor="#B6E214" stopOpacity={0.02} />
+                  </linearGradient>
+                  <linearGradient id="gradVisitantes" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" strokeOpacity={0.5} />
+                <XAxis dataKey="date" className="text-xs" tick={{ fontSize: 11 }} />
+                <YAxis className="text-xs" tick={{ fontSize: 11 }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
+                    fontSize: 13,
                   }}
                 />
-                <Legend />
+                <Legend
+                  wrapperStyle={{ fontSize: 13, paddingTop: 8 }}
+                  formatter={(value) => (
+                    <span style={{ color: value === "Visualizações" ? "#B6E214" : "#22d3ee", fontWeight: 600 }}>
+                      {value}
+                    </span>
+                  )}
+                />
                 <Area
                   type="monotone"
                   dataKey="pageviews"
                   name="Visualizações"
-                  stroke={CHART_COLORS.primary}
-                  fill={CHART_COLORS.primary}
-                  fillOpacity={0.3}
+                  stroke="#B6E214"
+                  strokeWidth={2.5}
+                  fill="url(#gradPageviews)"
+                  dot={false}
+                  activeDot={{ r: 5, fill: "#B6E214", stroke: "#fff", strokeWidth: 2 }}
                 />
                 <Area
                   type="monotone"
                   dataKey="sessions"
                   name="Visitantes"
-                  stroke={CHART_COLORS.secondary}
-                  fill={CHART_COLORS.secondary}
-                  fillOpacity={0.3}
+                  stroke="#22d3ee"
+                  strokeWidth={2.5}
+                  fill="url(#gradVisitantes)"
+                  dot={false}
+                  activeDot={{ r: 5, fill: "#22d3ee", stroke: "#fff", strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
