@@ -29,31 +29,31 @@ const AgendarDemo = () => {
 
   const testimonials = [
     {
+      name: "Michael Miller",
+      company: "Miller HVAC & Heating Pros",
+      location: "Houston, TX",
+      text: t("agendarDemo.testimonials.michael"),
+      rating: 5,
+    },
+    {
+      name: "Mateo Rodriguez",
+      company: "Rodriguez Plumbing Services",
+      location: "Phoenix, AZ",
+      text: t("agendarDemo.testimonials.mateo"),
+      rating: 5,
+    },
+    {
       name: "Carlos Mendes",
-      company: "Mendes Cleaning LLC",
+      company: "Mendes Premier Cleaning LLC",
       location: "Miami, FL",
       text: t("agendarDemo.testimonials.carlos"),
       rating: 5,
     },
     {
-      name: "Roberto Silva",
-      company: "Silva HVAC Inc",
-      location: "Houston, TX",
-      text: t("agendarDemo.testimonials.roberto"),
-      rating: 5,
-    },
-    {
-      name: "Ana Ferreira",
-      company: "Ferreira Landscaping LLC",
-      location: "Orlando, FL",
-      text: t("agendarDemo.testimonials.ana"),
-      rating: 5,
-    },
-    {
-      name: "Diego Santos",
-      company: "Santos Plumbing Services",
-      location: "Phoenix, AZ",
-      text: t("agendarDemo.testimonials.diego"),
+      name: "David Richardson",
+      company: "Apex Roofing & Construction LLC",
+      location: "Atlanta, GA",
+      text: t("agendarDemo.testimonials.david"),
       rating: 5,
     },
   ];
