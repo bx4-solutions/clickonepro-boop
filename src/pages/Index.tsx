@@ -42,6 +42,11 @@ import logoG2 from "@/assets/logo-g2.svg";
 import logoCapterra from "@/assets/logo-capterra.svg";
 import logoTrustpilot from "@/assets/logo-trustpilot.svg";
 
+// New High-Conversion & GEO Components
+import { GEOFAQSection, getFAQItems } from "@/components/GEOFAQSection";
+import { AfterHoursEmergencySection } from "@/components/AfterHoursEmergencySection";
+import { MissedCallsCalculator } from "@/components/MissedCallsCalculator";
+
 const Index = () => {
   const { t } = useTranslation();
   const [selectedDemo, setSelectedDemo] = useState(audioDemos[0]);
@@ -110,12 +115,32 @@ const Index = () => {
     },
   ];
 
+  const faqItems = getFAQItems(t);
+
   return (
     <Layout>
       <SEO 
         titleKey="seo.home.title" 
         descriptionKey="seo.home.description" 
-        schemaType="Organization"
+        schemaType="SoftwareApplication"
+        schemaData={{
+          productName: "ClickOne AI — Virtual Receptionist for Service Businesses",
+          productDescription: t("seo.home.description"),
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Web, iOS, Android",
+          offers: {
+            price: "0",
+            priceCurrency: "USD"
+          }
+        }}
+        additionalSchemas={[
+          {
+            type: "FAQPage",
+            data: {
+              faqItems: faqItems
+            }
+          }
+        ]}
       />
       {/* Hero Section - Enhanced */}
       <section className="relative overflow-hidden py-16 md:py-40 min-h-[90vh] flex items-center">
@@ -132,7 +157,7 @@ const Index = () => {
             alt={t("seo.home.heroAlt")}
             width={1920}
             height={1080}
-            fetchPriority="high"
+            fetchpriority="high"
             decoding="sync"
             className="w-full h-full object-cover object-center"
           />
@@ -469,6 +494,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Interactive Missed Calls ROI Calculator */}
+      <MissedCallsCalculator />
+
       {/* How It Works */}
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container">
@@ -549,6 +577,9 @@ const Index = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* 24/7 After-Hours & Emergency Routing Section */}
+      <AfterHoursEmergencySection />
 
       {/* Mobile App */}
       <section className="py-16 md:py-24 bg-background">
@@ -645,6 +676,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* GEO Structured FAQ Section (Google AI Overviews & Search Engine Optimization) */}
+      <GEOFAQSection />
 
       {/* Final CTA */}
       <section className="py-16 md:py-24 bg-primary text-primary-foreground">

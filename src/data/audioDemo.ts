@@ -21,7 +21,7 @@ export const audioDemos: AudioDemo[] = [
     id: "plumbing",
     title: "Plumbing",
     image: industryPlumbing,
-    audioUrl: "/audio/plumbing-demo.m4a",
+    audioUrl: "/audio/plumbing-demo.mp3",
     transcript: [
       { speaker: "ai", text: "Thank you for calling Mountain View Plumbing. How may I help you?", timestamp: 0 },
       { speaker: "client", text: "Hi, I just wanted to take a shower before work and realized I have no hot water. I think my water heater stopped working. I bought it from you guys five years ago, so I'm hoping it's still under warranty.", timestamp: 5 },
@@ -59,7 +59,7 @@ export const audioDemos: AudioDemo[] = [
     id: "cleaning",
     title: "Cleaning",
     image: industryCleaning,
-    audioUrl: "/audio/cleaning-demo.m4a",
+    audioUrl: "/audio/cleaning-demo.mp3",
     transcript: [
       { speaker: "ai", text: "Thank you for calling Pure Shine Cleaning. I can tell you more about our services and get your first cleaning scheduled. Where should we start?", timestamp: 0 },
       { speaker: "client", text: "Hi, I wanted to schedule a deep clean for my apartment, but I wanted to ask about pricing first.", timestamp: 8 },

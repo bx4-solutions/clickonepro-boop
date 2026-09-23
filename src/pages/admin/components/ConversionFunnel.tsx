@@ -42,7 +42,7 @@ const FUNNEL_STAGES = [
   { key: "pageviews", label: "Alcance", icon: Lightbulb, color: "#5a6f0a" },
   { key: "leads", label: "Descoberta e Qualificação", icon: MessageCircle, color: "#81A00E" },
   { key: "agendamentos", label: "Demonstração", icon: MousePointer, color: "#A4CC12" },
-  { key: "clientes", label: "Fechamento", icon: Trophy, color: "#B6E214" },
+  { key: "clientes", label: "Fechamento", icon: Trophy, color: "#7C3AED" },
 ];
 
 // Etapas que têm valor monetário (a partir do lead)

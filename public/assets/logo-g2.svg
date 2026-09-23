@@ -1,0 +1,6 @@
+<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- G2 Badge/Shield shape -->
+  <circle cx="20" cy="20" r="18" fill="#FF492C"/>
+  <!-- G2 text inside badge -->
+  <text x="20" y="27" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="bold" fill="white">G2</text>
+</svg>

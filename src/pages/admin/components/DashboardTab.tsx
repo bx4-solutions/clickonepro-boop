@@ -349,8 +349,8 @@ const DashboardTab = ({ filters, onRefresh, onRefreshStart }: DashboardTabProps)
               <AreaChart data={timelineData || []}>
                 <defs>
                   <linearGradient id="gradPageviews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#B6E214" stopOpacity={0.45} />
-                    <stop offset="95%" stopColor="#B6E214" stopOpacity={0.02} />
+                    <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.45} />
+                    <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.02} />
                   </linearGradient>
                   <linearGradient id="gradVisitantes" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.35} />
@@ -371,7 +371,7 @@ const DashboardTab = ({ filters, onRefresh, onRefreshStart }: DashboardTabProps)
                 <Legend
                   wrapperStyle={{ fontSize: 13, paddingTop: 8 }}
                   formatter={(value) => (
-                    <span style={{ color: value === "Visualizações" ? "#B6E214" : "#22d3ee", fontWeight: 600 }}>
+                    <span style={{ color: value === "Visualizações" ? "#7C3AED" : "#22d3ee", fontWeight: 600 }}>
                       {value}
                     </span>
                   )}
@@ -380,11 +380,11 @@ const DashboardTab = ({ filters, onRefresh, onRefreshStart }: DashboardTabProps)
                   type="monotone"
                   dataKey="pageviews"
                   name="Visualizações"
-                  stroke="#B6E214"
+                  stroke="#7C3AED"
                   strokeWidth={2.5}
                   fill="url(#gradPageviews)"
                   dot={false}
-                  activeDot={{ r: 5, fill: "#B6E214", stroke: "#fff", strokeWidth: 2 }}
+                  activeDot={{ r: 5, fill: "#7C3AED", stroke: "#fff", strokeWidth: 2 }}
                 />
                 <Area
                   type="monotone"

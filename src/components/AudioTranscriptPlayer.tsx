@@ -88,18 +88,21 @@ const AudioTranscriptPlayer = ({ demo }: AudioTranscriptPlayerProps) => {
     if (hasRealAudio && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
         setIsLoading(true);
         try {
           await audioRef.current.play();
+          setIsPlaying(true);
         } catch (error) {
-          console.error("Error playing audio:", error);
+          console.warn("Audio playback failed, switching to simulated mode:", error);
+          setHasRealAudio(false);
+          setIsPlaying(true);
+        } finally {
+          setIsLoading(false);
         }
-        setIsLoading(false);
       }
-      setIsPlaying(!isPlaying);
     } else {
-      // Simulated playback
       setIsPlaying(!isPlaying);
     }
   };
@@ -184,11 +187,15 @@ const AudioTranscriptPlayer = ({ demo }: AudioTranscriptPlayerProps) => {
           <audio
             ref={audioRef}
             src={demo.audioUrl}
-            preload="none"
+            preload="auto"
             aria-label={`Audio demonstration: ${demo.title}`}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={handleEnded}
+            onError={() => {
+              console.warn("Audio element error, falling back to simulated playback");
+              setHasRealAudio(false);
+            }}
           />
           
           {/* Progress Bar */}

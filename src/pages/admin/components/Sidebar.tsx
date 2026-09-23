@@ -15,7 +15,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
-import logoSidingDepot from "@/assets/logo-sidingdepot.png";
+import logoWhite from "@/assets/clickone-logo-white.png";
 
 interface SidebarProps {
   activeTab: string;
@@ -39,11 +39,11 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
   const location = useLocation();
 
   return (
-    <aside className="w-64 bg-sidebar min-h-screen flex flex-col">
-      <div className="p-6 border-b border-sidebar-border">
-        <a href={import.meta.env.DEV ? "http://localhost:4003" : "https://sidingdepot-git-main-bionicaosilva-2000s-projects.vercel.app"} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-          <img src={logoSidingDepot} alt="Siding Depot" className="h-10 w-auto" />
-        </a>
+    <aside className="w-64 bg-primary min-h-screen flex flex-col">
+      <div className="p-6 border-b border-primary-foreground/20">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logoWhite} alt="ClickOne AI" className="h-8 w-auto" />
+        </Link>
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
@@ -54,8 +54,8 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
             className={cn(
               "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
               activeTab === item.id
-                ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                ? "bg-primary-foreground text-primary font-bold shadow-sm"
+                : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
             )}
           >
             <item.icon className="h-5 w-5" />
@@ -63,14 +63,14 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
           </button>
         ))}
 
-        <div className="pt-4 border-t border-sidebar-border mt-4">
+        <div className="pt-4 border-t border-primary-foreground/20 mt-4">
           <Link
             to="/admin/blog"
             className={cn(
               "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
               location.pathname === "/admin/blog"
-                ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                ? "bg-primary-foreground text-primary font-bold"
+                : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
             )}
           >
             <PenSquare className="h-5 w-5" />
@@ -79,14 +79,14 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
         </div>
       </nav>
 
-      <div className="p-4 border-t border-sidebar-border space-y-1">
+      <div className="p-4 border-t border-primary-foreground/20 space-y-1">
         <Link
           to="/admin/settings"
           className={cn(
             "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
             location.pathname === "/admin/settings"
-              ? "bg-sidebar-accent text-sidebar-foreground"
-              : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              ? "bg-primary-foreground/20 text-primary-foreground font-bold"
+              : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
           )}
         >
           <Settings className="h-5 w-5" />
@@ -94,7 +94,7 @@ const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
         </Link>
         <button
           onClick={signOut}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-destructive/20 hover:text-red-300 transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-primary-foreground/80 hover:bg-destructive/20 hover:text-destructive-foreground transition-colors"
         >
           <LogOut className="h-5 w-5" />
           Sair
